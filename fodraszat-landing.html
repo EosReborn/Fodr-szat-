@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LORE Studio – Hajszalon</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:   #1A1A1A;
+      --card:    #242424;
+      --cream:   #F5F0E8;
+      --gold:    #C8A96E;
+      --muted:   #888;
+      --border:  #2E2E2E;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--cream);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 28px 60px;
+      background: linear-gradient(to bottom, rgba(26,26,26,0.98), transparent);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px; font-weight: 600; letter-spacing: 0.2em;
+      color: var(--cream); text-decoration: none;
+    }
+    .nav-logo span { color: var(--gold); }
+    .nav-links { display: flex; gap: 40px; list-style: none; }
+    .nav-links a {
+      font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none; transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--cream); }
+    .nav-cta {
+      font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--black); background: var(--gold);
+      padding: 10px 24px; text-decoration: none;
+      transition: opacity 0.3s;
+    }
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 0 60px;
+      position: relative; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 70% 50%, rgba(200,169,110,0.07) 0%, transparent 70%),
+        var(--black);
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 640px; }
+    .hero-eyebrow {
+      font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 28px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .hero-eyebrow::after {
+      content: ''; display: block; width: 48px; height: 1px; background: var(--gold); opacity: 0.5;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(56px, 7vw, 96px);
+      font-weight: 300; line-height: 1.0;
+      letter-spacing: -0.01em;
+      margin-bottom: 32px;
+    }
+    .hero-title em { font-style: italic; color: var(--gold); }
+    .hero-sub {
+      font-size: 15px; color: var(--muted); line-height: 1.8;
+      max-width: 420px; margin-bottom: 48px;
+    }
+    .hero-actions { display: flex; align-items: center; gap: 32px; }
+    .btn-primary {
+      font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+      background: var(--gold); color: var(--black);
+      padding: 16px 36px; text-decoration: none;
+      transition: opacity 0.3s;
+    }
+    .btn-primary:hover { opacity: 0.85; }
+    .btn-ghost {
+      font-size: 12px; letter-spacing: 0.1em;
+      color: var(--muted); text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2px; transition: color 0.3s, border-color 0.3s;
+    }
+    .btn-ghost:hover { color: var(--cream); border-color: var(--cream); }
+
+    /* Scissors icon */
+    .hero-scissors {
+      position: absolute; right: 8%; top: 50%; transform: translateY(-50%);
+      z-index: 1; opacity: 0.06;
+      animation: slowSpin 30s linear infinite;
+    }
+    @keyframes slowSpin {
+      from { transform: translateY(-50%) rotate(0deg); }
+      to   { transform: translateY(-50%) rotate(360deg); }
+    }
+    .scissors-svg { width: 380px; height: 380px; }
+
+    /* ─── DIVIDER ─── */
+    .gold-divider {
+      width: 100%; height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      opacity: 0.3;
+    }
+
+    /* ─── SERVICES ─── */
+    .section { padding: 100px 60px; }
+    .section-header { margin-bottom: 64px; }
+    .section-label {
+      font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 4vw, 56px);
+      font-weight: 300; line-height: 1.1;
+    }
+    .section-title em { font-style: italic; }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+    .service-card {
+      background: var(--card);
+      padding: 48px 40px;
+      position: relative; overflow: hidden;
+      transition: background 0.3s;
+      cursor: default;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: var(--gold); transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .service-card:hover::before { transform: scaleX(1); }
+    .service-card:hover { background: #2a2a2a; }
+    .service-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 48px; font-weight: 300; color: var(--border);
+      line-height: 1; margin-bottom: 20px; letter-spacing: -0.02em;
+    }
+    .service-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px; font-weight: 400;
+      margin-bottom: 12px; line-height: 1.2;
+    }
+    .service-desc {
+      font-size: 13px; color: var(--muted); line-height: 1.7;
+      margin-bottom: 28px;
+    }
+    .service-price {
+      font-size: 13px; color: var(--gold); letter-spacing: 0.05em;
+    }
+
+    /* ─── ABOUT ─── */
+    .about-section {
+      padding: 100px 60px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: center;
+    }
+    .about-visual {
+      position: relative; aspect-ratio: 3/4;
+      background: var(--card);
+      overflow: hidden;
+    }
+    .about-visual-inner {
+      position: absolute; inset: 20px;
+      border: 1px solid rgba(200,169,110,0.2);
+    }
+    .about-visual-lines {
+      position: absolute; inset: 0;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 39px,
+          rgba(200,169,110,0.04) 39px,
+          rgba(200,169,110,0.04) 40px
+        );
+    }
+    .about-placeholder {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 12px;
+    }
+    .about-placeholder-icon {
+      width: 48px; height: 1px; background: var(--gold); opacity: 0.4;
+    }
+    .about-placeholder-text {
+      font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--muted); opacity: 0.6;
+    }
+    .about-text .section-label { margin-bottom: 16px; }
+    .about-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 3vw, 48px); font-weight: 300;
+      line-height: 1.15; margin-bottom: 28px;
+    }
+    .about-title em { font-style: italic; color: var(--gold); }
+    .about-body {
+      font-size: 14px; color: var(--muted); line-height: 1.9;
+      margin-bottom: 20px;
+    }
+    .about-stat-row {
+      display: flex; gap: 48px; margin-top: 48px;
+    }
+    .about-stat { }
+    .about-stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 44px; font-weight: 300; color: var(--gold); line-height: 1;
+    }
+    .about-stat-label {
+      font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--muted); margin-top: 6px;
+    }
+
+    /* ─── TEAM ─── */
+    .team-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px;
+      margin-top: 64px;
+    }
+    .team-card {
+      background: var(--card);
+      overflow: hidden;
+    }
+    .team-photo {
+      aspect-ratio: 3/4; background: #1e1e1e;
+      position: relative; overflow: hidden;
+    }
+    .team-photo-lines {
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent, transparent 4px,
+        rgba(200,169,110,0.03) 4px, rgba(200,169,110,0.03) 5px
+      );
+    }
+    .team-photo-center {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .team-avatar {
+      width: 60px; height: 60px; border-radius: 50%;
+      border: 1px solid rgba(200,169,110,0.2);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .team-avatar-letter {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px; color: var(--gold); opacity: 0.5;
+    }
+    .team-info { padding: 24px 24px 28px; }
+    .team-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px; font-weight: 400; margin-bottom: 4px;
+    }
+    .team-role {
+      font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    /* ─── BOOKING ─── */
+    .booking-section {
+      padding: 120px 60px;
+      text-align: center;
+      position: relative;
+      background: var(--card);
+    }
+    .booking-section::before, .booking-section::after {
+      content: ''; display: block;
+      width: 1px; height: 80px;
+      background: linear-gradient(to bottom, transparent, var(--gold));
+      position: absolute; left: 50%; top: 0;
+    }
+    .booking-section::after {
+      top: auto; bottom: 0;
+      background: linear-gradient(to top, transparent, var(--gold));
+    }
+    .booking-label {
+      font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 24px;
+    }
+    .booking-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(40px, 5vw, 72px); font-weight: 300;
+      line-height: 1.1; margin-bottom: 20px;
+    }
+    .booking-title em { font-style: italic; }
+    .booking-sub {
+      font-size: 14px; color: var(--muted);
+      max-width: 440px; margin: 0 auto 56px;
+      line-height: 1.8;
+    }
+    .booking-note {
+      font-size: 11px; color: var(--muted); margin-top: 16px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ─── TESTIMONIALS ─── */
+    .testimonials-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+      margin-top: 64px;
+    }
+    .testi-card {
+      background: var(--card); padding: 40px;
+    }
+    .testi-stars {
+      color: var(--gold); font-size: 12px; letter-spacing: 0.2em;
+      margin-bottom: 20px;
+    }
+    .testi-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px; font-weight: 300; font-style: italic;
+      line-height: 1.6; margin-bottom: 24px; color: var(--cream);
+    }
+    .testi-author {
+      font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 60px;
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px;
+      border-top: 1px solid var(--border);
+    }
+    .footer-brand .nav-logo { font-size: 20px; display: inline-block; margin-bottom: 20px; }
+    .footer-desc { font-size: 13px; color: var(--muted); line-height: 1.8; max-width: 240px; }
+    .footer-col-title {
+      font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 20px;
+    }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a {
+      font-size: 13px; color: var(--muted); text-decoration: none;
+      transition: color 0.3s;
+    }
+    .footer-links a:hover { color: var(--cream); }
+    .footer-bottom {
+      padding: 20px 60px;
+      display: flex; justify-content: space-between;
+      border-top: 1px solid var(--border);
+      font-size: 11px; color: var(--muted); letter-spacing: 0.05em;
+    }
+
+    @media (max-width: 900px) {
+      nav { padding: 24px 28px; }
+      .nav-links { display: none; }
+      .hero { padding: 0 28px; }
+      .hero-scissors { display: none; }
+      .section { padding: 72px 28px; }
+      .services-grid { grid-template-columns: 1fr; gap: 2px; }
+      .about-section { grid-template-columns: 1fr; padding: 72px 28px; gap: 48px; }
+      .team-grid { grid-template-columns: repeat(2, 1fr); }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .booking-section { padding: 80px 28px; }
+          footer { grid-template-columns: 1fr 1fr; padding: 48px 28px; gap: 40px; }
+      .footer-bottom { padding: 20px 28px; flex-direction: column; gap: 8px; }
+    }
+
+
+    .contact-phone {
+      display: inline-block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 5vw, 60px); font-weight: 300;
+      color: var(--gold); text-decoration: none; letter-spacing: 0.05em;
+      margin-bottom: 28px;
+      border-bottom: 1px solid rgba(200,169,110,0.3);
+      padding-bottom: 8px;
+      transition: opacity 0.3s;
+    }
+    .contact-phone:hover { opacity: 0.75; }
+
+    /* ─── MOCKUP MODAL ─── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 999;
+      background: rgba(10,10,10,0.82);
+      backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    .modal-box {
+      background: var(--card);
+      border: 1px solid rgba(200,169,110,0.25);
+      max-width: 460px; width: 100%;
+      padding: 52px 48px 44px;
+      position: relative; text-align: center;
+    }
+    .modal-box::before {
+      content: '';
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 48px; height: 2px; background: var(--gold);
+    }
+    .modal-tag {
+      font-size: 10px; letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 20px;
+    }
+    .modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px; font-weight: 300; line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .modal-title em { font-style: italic; color: var(--gold); }
+    .modal-body {
+      font-size: 13px; color: var(--muted); line-height: 1.8;
+      margin-bottom: 36px;
+    }
+    .modal-close {
+      background: var(--gold); color: var(--black);
+      border: none; padding: 14px 36px;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+      cursor: pointer; transition: opacity 0.3s;
+    }
+    .modal-close:hover { opacity: 0.85; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-scissors { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MOCKUP MODAL -->
+  <div class="modal-overlay" id="mockupModal">
+    <div class="modal-box">
+      <div class="modal-tag">Bemutató oldal</div>
+      <h2 class="modal-title">Ez egy <em>mockup</em><br/>landing oldal</h2>
+      <p class="modal-body">
+        Az itt látható tartalom — nevek, árak, elérhetőségek — kizárólag tervezési célokat szolgál. Ez az oldal egy vizuális prototípus, nem valódi weboldal.
+      </p>
+      <button class="modal-close" onclick="document.getElementById('mockupModal').style.display='none'">Értettem, belépek</button>
+    </div>
+  </div>
+
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">LORE<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="#szolgaltatasok">Szolgáltatások</a></li>
+      <li><a href="#rolunk">Rólunk</a></li>
+      <li><a href="#csapat">Csapat</a></li>
+      <li><a href="#velemeny">Vélemények</a></li>
+    </ul>
+    <a href="#foglalas" class="nav-cta">Időpontfoglalás</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+
+    <!-- Scissors watermark -->
+    <div class="hero-scissors" aria-hidden="true">
+      <svg class="scissors-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="60" cy="60" r="28" stroke="#C8A96E" stroke-width="3"/>
+        <circle cx="140" cy="60" r="28" stroke="#C8A96E" stroke-width="3"/>
+        <line x1="82" y1="80" x2="155" y2="155" stroke="#C8A96E" stroke-width="3" stroke-linecap="round"/>
+        <line x1="118" y1="80" x2="45" y2="155" stroke="#C8A96E" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="60" cy="60" r="10" fill="#C8A96E" opacity="0.3"/>
+        <circle cx="140" cy="60" r="10" fill="#C8A96E" opacity="0.3"/>
+      </svg>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-eyebrow">Budapest – Andrássy út</div>
+      <h1 class="hero-title">
+        A haj<br/>
+        <em>művészete</em><br/>
+        nem siet.
+      </h1>
+      <p class="hero-sub">
+        Prémium hajstúdió, ahol minden kezelés egy rituálé. Személyre szabott stílus, tapasztalt mesterek, időtlen eredmény.
+      </p>
+      <div class="hero-actions">
+        <a href="#foglalas" class="btn-primary">Foglalj időpontot</a>
+        <a href="#szolgaltatasok" class="btn-ghost">Szolgáltatásaink</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="gold-divider"></div>
+
+  <!-- SERVICES -->
+  <section class="section" id="szolgaltatasok">
+    <div class="section-header">
+      <div class="section-label">Szolgáltatások</div>
+      <h2 class="section-title">Minden, amit<br/><em>a hajad kíván</em></h2>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-number">01</div>
+        <div class="service-name">Klasszikus hajvágás</div>
+        <p class="service-desc">Precíziós vágás, amely figyelembe veszi az arcod formáját, a hajad textúráját és az életstílusodat. Konzultációval együtt.</p>
+        <div class="service-price">6 900 Ft-tól</div>
+      </div>
+      <div class="service-card">
+        <div class="service-number">02</div>
+        <div class="service-name">Festés & Balayage</div>
+        <p class="service-desc">Természetes átmenetek, mélységek és fények. Kézi technikával festett árnyalatok, amelyek hetekig frissnek hatnak.</p>
+        <div class="service-price">18 900 Ft-tól</div>
+      </div>
+      <div class="service-card">
+        <div class="service-number">03</div>
+        <div class="service-name">Mélyhidratáló kezelés</div>
+        <p class="service-desc">Keratin- és aminosavdús procedúra sérült vagy töredezett hajra. Az eredmény azonnali, és hetekig tartó.</p>
+        <div class="service-price">12 400 Ft-tól</div>
+      </div>
+      <div class="service-card">
+        <div class="service-number">04</div>
+        <div class="service-name">Styling & Alkalmi frizura</div>
+        <p class="service-desc">Esküvőre, fotózásra, vagy egy különleges estére. Igényes, tartós megformálás profi eszközökkel.</p>
+        <div class="service-price">8 900 Ft-tól</div>
+      </div>
+      <div class="service-card">
+        <div class="service-number">05</div>
+        <div class="service-name">Fejbőrápolás</div>
+        <p class="service-desc">Fejmasszázs, tápláló pakolás és gyógyhatású szérum-bevezetés. A haj ereje a gyökérből indul.</p>
+        <div class="service-price">9 500 Ft-tól</div>
+      </div>
+      <div class="service-card">
+        <div class="service-number">06</div>
+        <div class="service-name">LORE Teljes Rituálé</div>
+        <p class="service-desc">Vágás, festés, kezelés és styling egy alkalom alatt. Saját mestereddel, saját tempódban, zavartalanul.</p>
+        <div class="service-price">36 900 Ft-tól</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="gold-divider"></div>
+
+  <!-- ABOUT -->
+  <section class="about-section" id="rolunk">
+    <div class="about-visual">
+      <div class="about-visual-lines"></div>
+      <div class="about-visual-inner"></div>
+      <div class="about-placeholder">
+        <div class="about-placeholder-icon"></div>
+        <div class="about-placeholder-text">Saját fotó helye</div>
+        <div class="about-placeholder-icon"></div>
+      </div>
+    </div>
+    <div class="about-text">
+      <div class="section-label">Rólunk</div>
+      <h2 class="about-title">
+        Nem trendeket követünk –<br/><em>karaktereket</em> építünk.
+      </h2>
+      <p class="about-body">
+        A LORE Stúdió 2015 óta működik Budapest szívében. Hisszük, hogy egy jó hajvágás nem csupán technikai teljesítmény: párbeszéd az ember és az anyag között.
+      </p>
+      <p class="about-body">
+        Mestereink Párizsban, Londonban és Milánóban tanultak, de munkájukba mindig belesimul az a bizonyos „pesti könnyedség", ami a mi stúdiónkat egyedivé teszi.
+      </p>
+      <div class="about-stat-row">
+        <div class="about-stat">
+          <div class="about-stat-num">9+</div>
+          <div class="about-stat-label">Év tapasztalat</div>
+        </div>
+        <div class="about-stat">
+          <div class="about-stat-num">4k</div>
+          <div class="about-stat-label">Elégedett vendég</div>
+        </div>
+        <div class="about-stat">
+          <div class="about-stat-num">8</div>
+          <div class="about-stat-label">Szakértő mester</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="gold-divider"></div>
+
+  <!-- TEAM -->
+  <section class="section" id="csapat">
+    <div class="section-header">
+      <div class="section-label">Csapatunk</div>
+      <h2 class="section-title">A kezek,<br/><em>amelyek formálnak</em></h2>
+    </div>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-photo">
+          <div class="team-photo-lines"></div>
+          <div class="team-photo-center">
+            <div class="team-avatar"><div class="team-avatar-letter">V</div></div>
+          </div>
+        </div>
+        <div class="team-info">
+          <div class="team-name">Varga Lívia</div>
+          <div class="team-role">Head Stylist</div>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-photo">
+          <div class="team-photo-lines"></div>
+          <div class="team-photo-center">
+            <div class="team-avatar"><div class="team-avatar-letter">K</div></div>
+          </div>
+        </div>
+        <div class="team-info">
+          <div class="team-name">Kovács Barnabás</div>
+          <div class="team-role">Color Specialist</div>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-photo">
+          <div class="team-photo-lines"></div>
+          <div class="team-photo-center">
+            <div class="team-avatar"><div class="team-avatar-letter">N</div></div>
+          </div>
+        </div>
+        <div class="team-info">
+          <div class="team-name">Nagy Réka</div>
+          <div class="team-role">Treatment Expert</div>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-photo">
+          <div class="team-photo-lines"></div>
+          <div class="team-photo-center">
+            <div class="team-avatar"><div class="team-avatar-letter">S</div></div>
+          </div>
+        </div>
+        <div class="team-info">
+          <div class="team-name">Szabó Dániel</div>
+          <div class="team-role">Stylist</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="gold-divider"></div>
+
+  <!-- TESTIMONIALS -->
+  <section class="section" id="velemeny">
+    <div class="section-header">
+      <div class="section-label">Vendégeink mondják</div>
+      <h2 class="section-title">Szavak,<br/><em>amelyek visszahoznak</em></h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">„Először életemben nem kellett magyaráznom, mit szeretnék. Lívia egyszerűen megértette."</p>
+        <div class="testi-author">Molnár Zs. · Budapest</div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">„A balayage olyan természetes lett, hogy barátaim meg sem kérdezték – azt hitték, így nőtt."</p>
+        <div class="testi-author">Takács B. · Debrecen</div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">„A fejbőrápoló kezelés után a hajam valóban megváltozott. Ez nem marketing – ez tapasztalat."</p>
+        <div class="testi-author">Fehér A. · Budapest</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="gold-divider"></div>
+
+  <!-- CONTACT -->
+  <section class="booking-section" id="foglalas">
+    <div class="booking-label">Kapcsolat</div>
+    <h2 class="booking-title">
+      Hívj minket,<br/><em>várunk téged.</em>
+    </h2>
+    <p class="booking-sub">
+      Időpontot telefonon foglalhatsz. Kollégáink hétfőtől szombatig várják hívásod.
+    </p>
+    <a href="tel:+3612345678" class="contact-phone">+36 1 234 5678</a>
+    <p class="booking-note">H–P: 9:00–19:00 &nbsp;·&nbsp; Szo: 9:00–17:00 &nbsp;·&nbsp; V: Zárva</p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-brand">
+      <a href="#" class="nav-logo">LORE<span>.</span></a>
+      <p class="footer-desc">Prémium hajszalon Budapest belvárosában. Mert a megjelenés az első gondolat, amit magadról megfogalmazol.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Navigáció</div>
+      <ul class="footer-links">
+        <li><a href="#szolgaltatasok">Szolgáltatások</a></li>
+        <li><a href="#rolunk">Rólunk</a></li>
+        <li><a href="#csapat">Csapat</a></li>
+        <li><a href="#foglalas">Kapcsolat</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Nyitvatartás</div>
+      <ul class="footer-links">
+        <li><a href="#">Hétfő – Péntek: 9–19</a></li>
+        <li><a href="#">Szombat: 9–17</a></li>
+        <li><a href="#">Vasárnap: Zárva</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Elérhetőség</div>
+      <ul class="footer-links">
+        <li><a href="#">Andrássy út 12., Budapest</a></li>
+        <li><a href="#">+36 1 234 5678</a></li>
+        <li><a href="#">hello@lorestudio.hu</a></li>
+        <li><a href="#">Instagram</a></li>
+      </ul>
+    </div>
+  </footer>
+  <div class="footer-bottom">
+    <span>© 2025 LORE Studio. Minden jog fenntartva.</span>
+    <span>Adatvédelmi tájékoztató</span>
+  </div>
+
+</body>
+</html>
